@@ -1,4 +1,4 @@
-const apiUrl = 'https://crudcrud.com/api/6b4bf01008444536a492782d7918a13b/votes';
+const apiUrl = 'https://crudcrud.com/api/a0bb4f7890784f4480b73395b2b014c6/class';
 let totalVotes = 0;
 
 function vote() {
@@ -33,6 +33,9 @@ function displayStudents() {
             studentList.innerHTML = '';
             totalVotes = 0;
 
+            // Create an object to store the count of votes for each candidate
+            const votesCount = {};
+
             students.forEach(student => {
                 const li = document.createElement('li');
                 li.textContent = `${student.studentName} - Voted for: ${student.monitorSelect}`;
@@ -46,10 +49,20 @@ function displayStudents() {
 
                 if (student.monitorSelect !== '') {
                     totalVotes++;
+                    // Increment the vote count for the selected candidate
+                    votesCount[student.monitorSelect] = (votesCount[student.monitorSelect] || 0) + 1;
                 }
             });
 
             document.getElementById('totalVotes').textContent = totalVotes.toString();
+
+            // Display the total number of votes for each candidate
+            for (const candidate in votesCount) {
+                const candidateVotes = votesCount[candidate];
+                const candidateVotesElement = document.createElement('li');
+                candidateVotesElement.textContent = `${candidate} - Total Votes: ${candidateVotes}`;
+                studentList.appendChild(candidateVotesElement);
+            }
         })
         .catch(error => console.error(error));
 }
